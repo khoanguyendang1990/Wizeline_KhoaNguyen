@@ -46,7 +46,7 @@ private WebDriver driver;
 		signUpPage.inputTextToEmail("khoa.nguyendang1990@hotmail.com");
 		System.out.println("done input email");
 		try {
-//			signUpPage.selectDropdown(SignUpPageUI.GENDER_DROPDOWN,"//div[@id='ui-select-choices-row-3-0']","Male");
+			signUpPage.selectDropdown(SignUpPageUI.GENDER_DROPDOWN,"//div[@id='ui-select-choices-row-3-0']","Male");
 			signUpPage.selectDropdown(SignUpPageUI.MONTH_DROPDOWN,SignUpPageUI.DROPDOWN,"May");
 			signUpPage.selectDropdown(SignUpPageUI.DAY_DROPDOWN,SignUpPageUI.DROPDOWN,"28");
 			signUpPage.selectDropdown(SignUpPageUI.YEAR_DROPDOWN,SignUpPageUI.DROPDOWN,"1990");
