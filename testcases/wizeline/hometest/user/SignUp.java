@@ -10,8 +10,10 @@ import pageObjects.SignUpPageObject;
 import pageUIs.SignUpPageUI;
 
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Parameters;
 
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 import java.util.concurrent.TimeUnit;
@@ -39,29 +41,19 @@ private WebDriver driver;
 
 	@Test
 	public void TC_01_SignUp() {
-		
 		signUpPage = (SignUpPageObject)homePage.openMultiplePage("Sign Up");
 		signUpPage.inputTextToFirstName("Khoa");
 		signUpPage.inputTextToLastName("Nguyen");
-		signUpPage.inputTextToEmail("khoa.nguyendang1990@hotmail.com");
-		System.out.println("done input email");
-		try {
-			signUpPage.selectDropdown(SignUpPageUI.GENDER_DROPDOWN,"//div[@id='ui-select-choices-row-3-0']","Male");
-			signUpPage.selectDropdown(SignUpPageUI.MONTH_DROPDOWN,SignUpPageUI.DROPDOWN,"May");
-			signUpPage.selectDropdown(SignUpPageUI.DAY_DROPDOWN,SignUpPageUI.DROPDOWN,"28");
-			signUpPage.selectDropdown(SignUpPageUI.YEAR_DROPDOWN,SignUpPageUI.DROPDOWN,"1990");
-			System.out.println("done selectdate");
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.getMessage();
-		}
-		
+		signUpPage.inputTextToEmail("khoa.nguyendang1990@gmail.com");
+		signUpPage.selectDropdown(SignUpPageUI.GENDER_DROPDOWN,SignUpPageUI.DROPDOWN_ITEM,"Male");
+		signUpPage.selectDropdown(SignUpPageUI.MONTH_DROPDOWN,SignUpPageUI.DROPDOWN_ITEM,"May");
+		signUpPage.selectDropdown(SignUpPageUI.DAY_DROPDOWN,SignUpPageUI.DROPDOWN_ITEM,"28");
+		signUpPage.selectDropdown(SignUpPageUI.YEAR_DROPDOWN,SignUpPageUI.DROPDOWN_ITEM,"1990");
 		signUpPage.clickOnNext();
 		assertTrue(signUpPage.isSubTitleIsDisplay());
 		
 	}
 
-	
 	@AfterClass
 	public void afterClass() {
 		driver.quit();

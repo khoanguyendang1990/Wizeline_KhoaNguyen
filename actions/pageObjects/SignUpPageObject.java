@@ -1,6 +1,7 @@
 package pageObjects;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import commons.AbstractPageObject;
 import pageUIs.SignUpPageUI;;
@@ -34,14 +35,9 @@ public class SignUpPageObject extends AbstractPageObject {
 		waitForElementVisible(SignUpPageUI.NEXT_BUTTON);
 		clickToElement(SignUpPageUI.NEXT_BUTTON);
 	}
-	public void selectDropdown(String parentLocator, String allItemLocator, String expectedItem) throws InterruptedException {
-		try {
-			waitForElementVisible(parentLocator);
-			selectItemInCustomDropdown(parentLocator, allItemLocator, expectedItem);	
-		} catch (InterruptedException e) {
-			e.getMessage();
-		}
-			
+	public void selectDropdown(String parentLocator, String itemLocator, String itemValue) {
+		waitForElementVisible(parentLocator);
+		selectItemInCustomDropdown(parentLocator, itemLocator, itemValue);
 	}
 	public boolean isSubTitleIsDisplay() {
 		// TODO Auto-generated method stub

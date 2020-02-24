@@ -152,26 +152,13 @@ public class AbstractPageObject {
 		}
 	}
 
-	public void selectItemInCustomDropdown(String parentLocator, String allItemLocator, String expectedItem)
-			throws InterruptedException {
+	
+	public void selectItemInCustomDropdown(String parentLocator,String itemLocator,String itemValue) {
 		element = find(parentLocator);
-
-		jsExecutor.executeScript("agrument[0].scrollIntoView(true);", element);
-		sleepInSecond(1);
-		jsExecutor.executeScript("agrument[0].click();", element);
-		sleepInSecond(1);
-		waitExplicit.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(allItemLocator)));
-		elements = finds(allItemLocator);
-
-		for (WebElement item : elements) {
-			if (item.getText().equals(expectedItem)) {
-				jsExecutor.executeScript("agurment[0].scrollIntoView(true);", expectedItem);
-				sleepInSecond(1);
-				item.click();
-				sleepInSecond(2);
-				break;
-			}
-		}
+		element.click();
+		String locator = String.format(itemLocator, itemValue);
+		waitForElementVisible(locator);
+		clickToElement(locator);		
 	}
 
 	public void sleepInSecond(long numberInSecond) {
