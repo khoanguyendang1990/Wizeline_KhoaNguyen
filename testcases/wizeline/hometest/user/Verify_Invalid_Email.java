@@ -1,9 +1,6 @@
 package wizeline.hometest.user;
 
-import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
-
-import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterClass;
@@ -26,20 +23,18 @@ private WebDriver driver;
 	
 	private HomePageObject homePage;
 	private SignUpPageObject signUpPage;
-	
 	@BeforeClass
 	@Parameters("browserName")
 	public void beforeClass(String browserName) {
-		driver = getBrowserDriver(browserName);
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-		driver.manage().window().maximize();
-		driver.get(Constants.URL);
+		driver = getBrowserDriver(browserName);		
 		homePage = PageGeneratorManager.getHomePage(driver);
+		homePage.openUrl(Constants.URL);	
 		signUpPage = (SignUpPageObject)homePage.openMultiplePage("Sign Up");
+		//assertTrue(false);
 	}
 
 
-	@Test(dataProvider = "getEmailData")
+	@Test(dataProvider = "getEmail")
 	public void TC_01_VerifyInvalidEmail(String email) {
 		signUpPage.inputTextToEmail(email);
 		signUpPage.waitForElementVisible(SignUpPageUI.EMAIL_ERROR);
@@ -47,7 +42,7 @@ private WebDriver driver;
 		assertTrue(signUpPage.getTextElement(SignUpPageUI.EMAIL_ERROR).contains("Enter valid email"));
 	}
 	
-	@DataProvider(name ="getEmailData")
+	@DataProvider(name ="getEmail")
 	public Object[][] getEmailData(){
 		return new Object[][] {
 			{"khoa.nguyendang1990"},
@@ -57,9 +52,9 @@ private WebDriver driver;
 			{"khoa.nguyendang1990@gmai.com@"}};
 	}
 	
-	@AfterClass
+	@AfterClass(alwaysRun=true)
 	public void afterClass() {
-		driver.quit();
+		homePage.quitBrowser();
 	}
 
 }

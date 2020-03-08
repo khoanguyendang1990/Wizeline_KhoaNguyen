@@ -5,7 +5,7 @@
   <parameter name="browserName" value="chrome"/>
     <classes>
 		<class name="wizeline.hometest.user.SignUp"/>
-     	<class name="wizeline.hometest.user.Verify_Invalid_Email"/>
+     	<!-- <class name="wizeline.hometest.user.Verify_Invalid_Email"/> -->
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->

@@ -5,8 +5,6 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
-import org.openqa.selenium.ElementClickInterceptedException;
-import org.openqa.selenium.ElementNotSelectableException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
@@ -43,6 +41,10 @@ public class AbstractPageObject {
 
 	public void openUrl(String urlValue) {
 		driver.get(urlValue);
+	}
+
+	public void quitBrowser() {
+		driver.quit();
 	}
 
 	public String getPageTitle() {
@@ -98,67 +100,48 @@ public class AbstractPageObject {
 	}
 
 	public void clickToElement(String locator) {
-		try {
-			element = find(locator);
-			element.click();
-		} catch (ElementClickInterceptedException e) {
-			logger.error("Exception Occurred While Clicking To Element: " + e.getMessage());
-		}
+
+		element = find(locator);
+		element.click();
+
 	}
-	
+
 	public void clickToElement(String locator, String... params) {
-		try {
-			locator = castRestParameter(locator, params);
-			element = find(locator);
-			element.click();
-		} catch (ElementClickInterceptedException e) {
-			logger.error("Exception Occurred While Clicking To Element: " + e.getMessage());
-		}
+		locator = castRestParameter(locator, params);
+		element = find(locator);
+		element.click();
 	}
-	
+
 	public String castRestParameter(String locator, String... params) {
 		locator = String.format(locator, (Object[]) params);
 		return locator;
 	}
 
 	public void sendKeyToElement(String locator, String value) {
-		try {
-			element = find(locator);
-			element.clear();
-			element.sendKeys(value);
-		} catch (NoSuchElementException e) {
-			logger.error("Exception Occurred While Sendkey To Element: " + e.getMessage());
-		}
+		element = find(locator);
+		element.clear();
+		element.sendKeys(value);
 	}
-	
-	public void sendKeyToElement(String locator, String... values) {
-		try {
-			locator = castRestParameter(locator, values);
-			element = find(locator);
-			element.clear();
-			element.sendKeys(values);
-		} catch (NoSuchElementException e) {
-			logger.error("Exception Occurred While Sendkey To Element: " + e.getMessage());
-		}
+
+	public void sendKeyToElement(String locator,String textValue, String... values) {
+		locator = castRestParameter(locator, values);
+		element = find(locator);
+		element.clear();
+		element.sendKeys(textValue);
 	}
 
 	public void selectItemInDropdown(String locator, String valueItem) {
-		try {
-			element = find(locator);
-			select = new Select(element);
-			select.selectByVisibleText(valueItem);
-		} catch (ElementNotSelectableException e) {
-			logger.error("Exception Occurred While Select Item In Dropdown List To Element: " + e.getMessage());
-		}
+		element = find(locator);
+		select = new Select(element);
+		select.selectByVisibleText(valueItem);
 	}
 
-	
-	public void selectItemInCustomDropdown(String parentLocator,String itemLocator,String itemValue) {
+	public void selectItemInCustomDropdown(String parentLocator, String itemLocator, String itemValue) {
 		element = find(parentLocator);
 		element.click();
 		String locator = String.format(itemLocator, itemValue);
 		waitForElementVisible(locator);
-		clickToElement(locator);		
+		clickToElement(locator);
 	}
 
 	public void sleepInSecond(long numberInSecond) {
@@ -172,13 +155,9 @@ public class AbstractPageObject {
 
 	public String getItemInDropdown(String locator) {
 		String valueItem = null;
-		try {
-			element = find(locator);
-			select = new Select(element);
-			valueItem = select.getFirstSelectedOption().getText();
-		} catch (ElementNotSelectableException e) {
-			logger.error("Exception Occurred While Select Item In Dropdown List To Element: " + e.getMessage());
-		}
+		element = find(locator);
+		select = new Select(element);
+		valueItem = select.getFirstSelectedOption().getText();
 		return valueItem;
 	}
 
@@ -191,7 +170,7 @@ public class AbstractPageObject {
 		element = find(locator);
 		return element.getText();
 	}
-	
+
 	public String getTextElement(String locator, String... params) {
 		locator = castRestParameter(locator, params);
 		element = find(locator);
@@ -218,6 +197,12 @@ public class AbstractPageObject {
 	}
 
 	public boolean isElementDisplay(String locator) {
+		element = find(locator);
+		return element.isDisplayed();
+	}
+	
+	public boolean isElementDisplay(String locator,String... params) {
+		locator = castRestParameter(locator, params);
 		element = find(locator);
 		return element.isDisplayed();
 	}
@@ -321,7 +306,7 @@ public class AbstractPageObject {
 		by = By.xpath(locator);
 		waitExplicit.until(ExpectedConditions.visibilityOfElementLocated(by));
 	}
-	
+
 	public void waitForElementVisible(String locator, String... params) {
 		locator = castRestParameter(locator, params);
 		by = By.xpath(locator);
@@ -332,7 +317,7 @@ public class AbstractPageObject {
 		by = By.xpath(locator);
 		waitExplicit.until(ExpectedConditions.presenceOfElementLocated(by));
 	}
-	
+
 	public void waitForElementPresence(String locator, String... params) {
 		locator = castRestParameter(locator, params);
 		by = By.xpath(locator);
@@ -349,11 +334,10 @@ public class AbstractPageObject {
 		waitExplicit.until(ExpectedConditions.elementToBeClickable(by));
 	}
 
-	
 	public AbstractPageObject openMultiplePage(String pageName) {
-		waitForElementVisible(AbstractPageUI.DYNAMIC_LOCATOR,pageName);
-		clickToElement(AbstractPageUI.DYNAMIC_LOCATOR,pageName);
-		switch(pageName) {
+		waitForElementVisible(AbstractPageUI.DYNAMIC_LOCATOR, pageName);
+		clickToElement(AbstractPageUI.DYNAMIC_LOCATOR, pageName);
+		switch (pageName) {
 		case "Home Page":
 			return PageGeneratorManager.getHomePage(driver);
 		case "Sign Up":
@@ -362,10 +346,10 @@ public class AbstractPageObject {
 			return PageGeneratorManager.getHomePage(driver);
 		}
 	}
-	
+
 	public void openMultiplePages(String pageName) {
-		waitForElementVisible(AbstractPageUI.DYNAMIC_LOCATOR,pageName);
-		clickToElement(AbstractPageUI.DYNAMIC_LOCATOR,pageName);
+		waitForElementVisible(AbstractPageUI.DYNAMIC_LOCATOR, pageName);
+		clickToElement(AbstractPageUI.DYNAMIC_LOCATOR, pageName);
 	}
-		
+
 }

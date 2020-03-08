@@ -1,7 +1,6 @@
 package pageObjects;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import commons.AbstractPageObject;
 import pageUIs.SignUpPageUI;;
@@ -39,11 +38,15 @@ public class SignUpPageObject extends AbstractPageObject {
 		waitForElementVisible(parentLocator);
 		selectItemInCustomDropdown(parentLocator, itemLocator, itemValue);
 	}
-	public boolean isSubTitleIsDisplay() {
+	public boolean isSubTitleIsDisplay(String subTitle) {
 		// TODO Auto-generated method stub
-		waitForElementVisible(SignUpPageUI.STEP2_SUBTITLE);
-		return isElementDisplay(SignUpPageUI.STEP2_SUBTITLE);
+		waitForElementVisible(SignUpPageUI.SUBTITLE,subTitle);
+		return isElementDisplay(SignUpPageUI.SUBTITLE,subTitle);
 	}
 	
-	
+	public void clickOnNextDevice() {
+		// TODO Auto-generated method stub
+		waitForElementVisible(SignUpPageUI.NEXT_BUTTON);
+		clickToElement(SignUpPageUI.NEXT_BUTTON);
+	}
 }
