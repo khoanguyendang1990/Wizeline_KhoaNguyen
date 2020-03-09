@@ -136,12 +136,25 @@ public class AbstractPageObject {
 		select.selectByVisibleText(valueItem);
 	}
 
-	public void selectItemInCustomDropdown(String parentLocator, String itemLocator, String itemValue) {
+	public void selectItemInCustomDropdown(String parentLocator, String allItemLocator, String expectedItem)
+			throws InterruptedException {
 		element = find(parentLocator);
-		element.click();
-		String locator = String.format(itemLocator, itemValue);
-		waitForElementVisible(locator);
-		clickToElement(locator);
+		jsExecutor.executeScript("arguments[0].scrollIntoView(true);", element);
+		sleepInSecond(1);
+		jsExecutor.executeScript("arguments[0].click();", element);
+		sleepInSecond(1);
+		waitExplicit.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(allItemLocator)));
+		elements = finds(allItemLocator);
+
+		for (WebElement item : elements) {
+			if (item.getText().equals(expectedItem)) {
+				jsExecutor.executeScript("arguments[0].scrollIntoView(true);", item);
+				sleepInSecond(1);
+				item.click();
+				sleepInSecond(2);
+				break;
+			}
+		}
 	}
 
 	public void sleepInSecond(long numberInSecond) {

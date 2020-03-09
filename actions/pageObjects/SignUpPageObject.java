@@ -34,7 +34,7 @@ public class SignUpPageObject extends AbstractPageObject {
 		waitForElementVisible(SignUpPageUI.NEXT_BUTTON);
 		clickToElement(SignUpPageUI.NEXT_BUTTON);
 	}
-	public void selectDropdown(String parentLocator, String itemLocator, String itemValue) {
+	public void selectDropdown(String parentLocator, String itemLocator, String itemValue) throws InterruptedException {
 		waitForElementVisible(parentLocator);
 		selectItemInCustomDropdown(parentLocator, itemLocator, itemValue);
 	}
